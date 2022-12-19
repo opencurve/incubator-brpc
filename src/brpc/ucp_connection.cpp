@@ -37,8 +37,15 @@ DEFINE_uint32(brpc_ucp_iov_reserve, 64, "Number of iov elements are cached");
 
 bthread_attr_t ucp_consumer_thread_attr = BTHREAD_ATTR_NORMAL;
 
+static int get_am_count(void *arg);
+static int get_send_info_count(void *arg);
+
 // to avoid be destructed, dynamically allocated it
 static bvar::Adder<int> *g_ucp_conn;
+static bvar::PassiveStatus<int> g_am_count("am_cnt", get_am_count, NULL);
+static bvar::PassiveStatus<int> g_send_info_count("send_info_cnt",
+	get_send_info_count, NULL);
+
 static uma_zone_t am_msg_zone;
 static uma_zone_t am_send_info_zone;
 
@@ -48,6 +55,16 @@ BAIDU_GLOBAL_INIT() {
     am_send_info_zone = uma_zcreate("ucp::am_send_info", sizeof(UcpAmSendInfo),
          NULL, NULL, UcpAmSendInfo::init, UcpAmSendInfo::fini, UMA_ALIGN_PTR, 0);
     g_ucp_conn = new bvar::Adder<int>("ucp_connection_count");
+}
+
+static int get_am_count(void *)
+{
+    return am_msg_zone ? uma_zone_get_cur(am_msg_zone) : 0;
+}
+
+static int get_send_info_count(void *)
+{
+    return am_send_info_zone ? uma_zone_get_cur(am_send_info_zone) : 0;
 }
 
 UcpAmMsg::UcpAmMsg()
