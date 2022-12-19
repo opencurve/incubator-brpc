@@ -1419,7 +1419,7 @@ zone_ctor(void *mem, int size, void *udata, int flags)
 	zone->uz_release = (uma_release)zone_release;
 	zone->uz_arg = zone; 
 
-        if (keg == NULL) {
+	if (keg == NULL) {
 		if ((keg = uma_kcreate(zone, arg->size, arg->uminit, arg->fini,
 		    arg->align, arg->flags)) == NULL)
 			return (ENOMEM);
