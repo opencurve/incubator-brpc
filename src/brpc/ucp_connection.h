@@ -22,7 +22,6 @@
 #include "butil/intrusive_ptr.hpp"
 #include "butil/atomicops.h"
 #include "butil/iobuf.h"
-#include "butil/resource_pool.h"
 #include "bthread/mutex.h"
 #include "bthread/rwlock_v2.h"
 #include "bthread/condition_variable.h"
@@ -101,7 +100,6 @@ struct UcpAmMsg {
     int flags;
     ucs_status_t code;
     void *req;
-    butil::ResourceId<UcpAmMsg> id;
 
     void set_flag(int f) { flags |= UCS_BIT(f); }
     void clear_flag(int f) { flags &= ~UCS_BIT(f); }
@@ -116,8 +114,6 @@ struct UcpAmMsg {
 private:
     UcpAmMsg();
     void operator delete( void * ) {}
-
-    friend class butil::ResourcePool<UcpAmMsg>;
 };
 
 struct UcpAmSendInfo {
@@ -129,7 +125,6 @@ struct UcpAmSendInfo {
     ucs_status_t code;
     void *req;
     int nvec;
-    butil::ResourceId<UcpAmSendInfo> id;
 
     static UcpAmSendInfo *Allocate(void);
     static void Release(UcpAmSendInfo *o);
@@ -140,7 +135,6 @@ struct UcpAmSendInfo {
 private:
     UcpAmSendInfo();
     void operator delete( void * ) {}
-    friend class butil::ResourcePool<UcpAmSendInfo>;
 };
 
 class UcpConnection {
