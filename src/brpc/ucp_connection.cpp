@@ -33,7 +33,7 @@
 namespace brpc {
 
 DEFINE_int32(brpc_ucp_ping_timeout, 10, "Number of seconds");
-DEFINE_uint32(brpc_ucp_iov_reserve, 64, "Number of iov elements are cached");
+DEFINE_uint32(brpc_ucp_iov_reserve, 32, "Number of iov elements are cached");
 
 bthread_attr_t ucp_consumer_thread_attr = BTHREAD_ATTR_NORMAL;
 
@@ -114,7 +114,7 @@ void UcpAmMsg::Release(UcpAmMsg *o)
     o->flags = 0;
     o->buf.clear();
     if (o->iov.capacity() > FLAGS_brpc_ucp_iov_reserve) {
-        o->iov.resize(0);
+        o->iov = butil::iobuf_ucp_iov_t();
     }
     uma_zfree(am_msg_zone, o);
 }
@@ -152,9 +152,8 @@ void UcpAmSendInfo::Release(UcpAmSendInfo *o)
     o->req = nullptr;
     o->nvec = 0;
     o->buf.clear();
-    if (o->iov.size() > FLAGS_brpc_ucp_iov_reserve) {
-        o->iov.resize(FLAGS_brpc_ucp_iov_reserve);
-        o->iov.shrink_to_fit();
+    if (o->iov.capacity() > FLAGS_brpc_ucp_iov_reserve) {
+	o->iov = butil::iobuf_ucp_iov_t();
     }
 
     uma_zfree(am_send_info_zone, o);
