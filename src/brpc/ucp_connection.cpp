@@ -33,7 +33,7 @@
 namespace brpc {
 
 DEFINE_int32(brpc_ucp_ping_timeout, 10, "Number of seconds");
-DEFINE_uint32(brpc_ucp_iov_reserve, 32, "Number of iov elements are cached");
+DEFINE_uint32(brpc_ucp_iov_reserve, 8, "Number of iov elements are cached");
 
 bthread_attr_t ucp_consumer_thread_attr = BTHREAD_ATTR_NORMAL;
 
