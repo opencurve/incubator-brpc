@@ -167,7 +167,6 @@ UcpConnection::UcpConnection(UcpCm *cm, UcpWorker *w)
     , ucp_recv_code_(UCS_OK)
     , socket_id_(-1)
     , socket_id_set_(false)
-    , conn_was_reset_(false)
     , state_(STATE_NONE)
     , ready_list_(NULL)
 {

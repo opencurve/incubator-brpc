@@ -990,8 +990,6 @@ void UcpWorker::ErrorCallback(void *arg, ucp_ep_h ep, ucs_status_t status)
         LOG(ERROR) << "Can not find ep in ErrorCallback, may be moved";
         return;
     }
-    if (status == UCS_ERR_CONNECTION_RESET)
-        conn->conn_was_reset_ = true;
     butil::EndPointStr str = endpoint2str(conn->remote_side_);
     LOG(ERROR) << "Error occurred on remote side " << str.c_str()
                << " (" << ucs_status_string(status) << ")";
