@@ -169,16 +169,16 @@ UcpConnection::UcpConnection(UcpCm *cm, UcpWorker *w)
     , socket_id_set_(false)
     , conn_was_reset_(false)
     , state_(STATE_NONE)
-    , data_ready_flag_(false)
-    , expect_sn_(0)
     , ready_list_(NULL)
 {
     ping_seq_ = 0;
+    next_send_sn_ = 0;
+    data_ready_flag_ = false;
+    expect_sn_ = 0;
     bthread_rwlock_init(&mutex_, NULL);
     remote_side_.set_ucp();
     TAILQ_INIT(&recv_q_);
     TAILQ_INIT(&send_q_);
-    next_send_sn_ = 0;
     *g_ucp_conn << 1;
 }
 
