@@ -172,8 +172,8 @@ private:
 private:
     enum {
         STATE_NONE,
-	    STATE_HELLO,
-	    STATE_WAIT_HELLO,
+        STATE_HELLO,
+        STATE_WAIT_HELLO,
         STATE_OPEN,
         STATE_CLOSED,
     };
