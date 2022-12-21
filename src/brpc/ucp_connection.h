@@ -213,7 +213,7 @@ private:
     UcpAmSendList send_q_;
 
     union {
-        // Accessed both by brpc receiver thread UcpWorker
+        // Accessed both by brpc receiver thread and UcpWorker
         butil::atomic<UcpAmMsg *> ready_list_;
         char cacheline__[BAIDU_CACHELINE_SIZE];
     } BAIDU_CACHELINE_ALIGNMENT;
