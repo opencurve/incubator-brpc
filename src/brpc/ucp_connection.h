@@ -19,7 +19,6 @@
 
 #include "butil/macros.h"
 #include "butil/endpoint.h"
-#include "butil/intrusive_ptr.hpp"
 #include "butil/atomicops.h"
 #include "butil/iobuf.h"
 #include "bthread/mutex.h"
