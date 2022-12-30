@@ -43,6 +43,9 @@
 namespace butil {
 namespace iobuf {
 
+#define SIZE_64K    (64 * 1024)
+#define SIZE_1M     (1024 * 1024)
+
 static int get_uma_iobuf_count(void *arg);
 static int get_uma_block_count(void *arg);
 static int get_64K_count(void *arg);
@@ -216,9 +219,9 @@ void *iobuf_malloc(size_t size)
     start_uma();
     if (size == IOBuf::DEFAULT_BLOCK_SIZE)
         return uma_zalloc(iobuf_zone, 0);
-    if (size == 64 * 1024 || size == 1024 * 1024) {
+    if (size == SIZE_64K || size == SIZE_1M) {
         void *buf;
-        if (size == 64 * 1024)
+        if (size == SIZE_64K)
             buf = iobuf_64K_cache.pop();
         else
             buf = iobuf_1M_cache.pop();
@@ -238,7 +241,7 @@ void iobuf_free(void *mem, size_t size)
 
     if (size == IOBuf::DEFAULT_BLOCK_SIZE)
         uma_zfree(iobuf_zone, mem);
-    else if (size == 64 * 1024) {
+    else if (size == SIZE_64K) {
         static struct timeval tv_64k_last = {0, 0};
         if (!iobuf_64K_cache.push(mem))
             return;
@@ -249,7 +252,7 @@ void iobuf_free(void *mem, size_t size)
         }
 
         g_iobuf_64k_overflow << 1;
-    } else if (size == 1024 * 1024) {
+    } else if (size == SIZE_1M) {
         static struct timeval tv_1M_last = {0, 0};
         if (!iobuf_1M_cache.push(mem))
             return;
@@ -1845,12 +1848,12 @@ ssize_t IOPortal::prepare_buffer(size_t max_count, int max_iov, iobuf_ucp_iov_t 
     Block* p = _block;
     int size_hint;
 
-    if (max_count < 64 * 1024)
+    if (max_count < SIZE_64K)
         block_size = DEFAULT_BLOCK_SIZE;
-    else if (max_count < 1024 * 1024)
-        block_size = 64 * 1024;
+    else if (max_count < SIZE_1M)
+        block_size = SIZE_64K;
     else
-        block_size = 1024 * 1024;
+        block_size = SIZE_1M;
     size_hint = (max_count + block_size - 1) & ~(block_size - 1);
     vec.reserve(size_hint);
 
