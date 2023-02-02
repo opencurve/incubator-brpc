@@ -1267,7 +1267,7 @@ ssize_t UcpWorker::StartSend(int cmd, UcpConnection *conn,
         MsgHeader header;
         UcpAmSendInfo *msg = UcpAmSendInfo::Allocate();
         if (msg == NULL) {
-            LOG(ERROR) << "Cannot allocater UcpAmSendInfo";
+            LOG(ERROR) << "Cannot allocate UcpAmSendInfo";
             err = ENOMEM;
             break;
         }
