@@ -37,7 +37,7 @@ static UcpContext *g_ucp_ctx;
 static pthread_once_t g_ucp_ctx_init = PTHREAD_ONCE_INIT;
 
 //
-// Disable cpu power-saving mode may reduce DMA latency. If you don't
+// Disabling cpu power-saving mode may reduce DMA latency. If you don't
 // use busy-polling mode, you may turn off power-saving mode, normally
 // you should set it to C0 with --brpc_set_cpu_latency=0.
 // Note that the /dev/cpu_dma_latency can only be written by root,
