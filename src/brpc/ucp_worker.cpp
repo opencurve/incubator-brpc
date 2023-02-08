@@ -1278,10 +1278,7 @@ ssize_t UcpWorker::StartSend(int cmd, UcpConnection *conn,
             pad_buf_.fill_ucp_iov(&msg->iov, &msg->nvec, to_pad);
         msg->buf.append(butil::IOBuf::Movable(*data_list[i]));
         msg->buf.fill_ucp_iov(&msg->iov, &msg->nvec, ULONG_MAX);
-        header.init();
-        header.cmd = cmd;
-        header.pad = to_pad;
-        header.sn = conn->next_send_sn_;
+        header.init(cmd, to_pad, conn->next_send_sn_);
         MsgHeaderOut(&header, &msg->header);
         msg->conn = conn->shared_from_this();
 

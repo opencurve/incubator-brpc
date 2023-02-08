@@ -66,6 +66,14 @@ struct MsgHeader {
         reserve = 0;
         sn = -1L;
     }
+
+    void init(uint16_t a_cmd, uint16_t a_pad, uint64_t a_sn) {
+        ver = UCP_VER_0;
+        cmd = a_cmd;
+        pad = a_pad;
+        reserve = 0;
+        sn  = a_sn;
+    }
 };
 
 struct UcpAmMsg;
