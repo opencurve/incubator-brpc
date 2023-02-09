@@ -61,17 +61,16 @@ private:
 
     struct Fd0Item {
         int fd1;
-        ino_t ino;
+        int64_t cookie_;
 
-        Fd0Item() : ino(0) {}
+        Fd0Item() : cookie_(0) {}
     };
 
     struct Fd1Item {
         UcpConnectionRef conn;
-        ino_t ino;
-        mode_t mode;
+        int64_t cookie_;
 
-        Fd1Item() : ino(0) , mode(0) {}
+        Fd1Item() : cookie_(0) {}
     };
 
     static void* RunFdThread(void *arg);
@@ -91,6 +90,7 @@ private:
     bthread_t fd_tid_;
     int epfd_;
     int pipe_fds_[2];
+    int64_t gen_;
     std::map<int, Fd0Item> fd_conns_0_;
     std::map<int, Fd1Item> fd_conns_1_;
 
