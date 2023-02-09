@@ -32,8 +32,8 @@
 
 //
 // UcpCM创建的UcpConnection将以fd的方式返回，fd是一个pipe写端的句柄。
-// 使用fd的目的是因为socket很多方面用到fd，并且SocketOptions就是传递fd作为
-// 创建socket的参数。为了方便，固使用fd。
+// 使用fd的目的是因为BRPC Socket代码很多方面用到fd，并且SocketOptions就是传递
+// fd作为创建Socket对象的参数。为了方便，固使用fd。
 // Socket层面只需要通过这个fd查询到UcpConnection对象，并使用这个对象的io接口。
 // 
 namespace brpc {
